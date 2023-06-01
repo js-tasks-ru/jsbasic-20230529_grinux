@@ -1,3 +1,9 @@
 function truncate(str, maxlength) {
-  // ваш код...
+  if (str.length <= maxlength)
+    return str;
+  str_tr = '';
+  for (i = 0; i < maxlength - 1; i++)
+    str_tr = str_tr + str[i];
+  str_tr = str_tr + '…';
+  return str_tr;
 }
