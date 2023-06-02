@@ -1,6 +1,5 @@
-function checkSpam(str) {
-  str_lc = '';
-  for (i = 0; i < str.length; i++)
-    str_lc = str_lc + str[i].toLowerCase(); 
+function checkSpam(str)
+{
+  let str_lc = str.toLowerCase();
   return (str_lc.includes('1xbet now') || str_lc.includes('free xxxxx'))
 }
