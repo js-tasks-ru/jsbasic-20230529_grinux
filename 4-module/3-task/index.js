@@ -31,7 +31,7 @@ function highlight(table)
           item.classList.add('unavailable');
       }
       else
-        item.setAttribute('hidden', '');
+        item.hidden = true;
     }
   }
   else
