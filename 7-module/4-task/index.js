@@ -55,15 +55,18 @@ export default class StepSlider {
           else
             break;
         }
-        slider_value.innerText = position;
-        slider_steps.children[this._position].classList.remove('slider__step-active');  
-        slider_steps.children[position].classList.add('slider__step-active');
-        this._position = position;  
-        slider.dispatchEvent(new CustomEvent('slider-change', {
-          detail: this._position,
-          bubbles: true
-        }));
-        console.log(`move event generated. position: ${this._position}`);
+        if (position != this._position)
+        {
+          slider_value.innerText = position;
+          slider_steps.children[this._position].classList.remove('slider__step-active');
+          slider_steps.children[position].classList.add('slider__step-active');
+          this._position = position;
+          slider.dispatchEvent(new CustomEvent('slider-change', {
+            detail: this._position,
+            bubbles: true
+          }));
+          //console.log(`move event generated. position: ${this._position}`);
+        }
       }
     }
 
