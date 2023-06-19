@@ -25,7 +25,7 @@ export default class StepSlider {
     for (let i = 0; i < steps; i++)
       slider_steps.appendChild(createElement(`<span></span>`));
     slider_steps.children[this._position].classList.add('slider__step-active');
-    slider.querySelector('.slider__value').innerText = this._position;  
+    slider_value.innerText = this._position;  
     let fill = 100 / (steps - 1) * this._position; 
     slider_progress.style.width = `${fill}%`;   
     slider_thumb.style.left = `${fill}%`;
