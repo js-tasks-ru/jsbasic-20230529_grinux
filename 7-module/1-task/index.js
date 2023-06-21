@@ -62,7 +62,7 @@ export default class RibbonMenu {
             if (id) 
             { 
               event.preventDefault();
-              console.log('Click source: ', id); 
+              //console.log('Click source: ', id); 
               this._active_item.classList.remove('ribbon__item_active');
               click_src.classList.add('ribbon__item_active');
               this._active_item = click_src;
