@@ -35,8 +35,8 @@ export default class CartIcon {
   }
 
   addEventListeners() {
-    document.addEventListener('scroll', () => this.updatePosition(event));
-    window.addEventListener('resize', () => this.updatePosition(event));
+    document.addEventListener('scroll', () => this.updatePosition());
+    window.addEventListener('resize', () => this.updatePosition());
   }
 
   updatePosition() {
