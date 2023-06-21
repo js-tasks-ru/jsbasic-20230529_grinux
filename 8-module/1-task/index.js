@@ -9,6 +9,7 @@ export default class CartIcon {
 
   render() {
     this.elem = createElement('<div class="cart-icon"></div>');
+    this.scroll_mode = false;
   }
 
   update(cart) {
@@ -34,11 +35,34 @@ export default class CartIcon {
   }
 
   addEventListeners() {
-    document.addEventListener('scroll', () => this.updatePosition());
-    window.addEventListener('resize', () => this.updatePosition());
+    document.addEventListener('scroll', () => this.updatePosition(event));
+    window.addEventListener('resize', () => this.updatePosition(event));
   }
 
   updatePosition() {
-    // ваш код ...
+    let window_width = parseInt(document.documentElement.clientWidth, 10);
+    if (this.elem.classList.contains('cart-icon_visible') && window_width > 767)
+    {
+      if (document.documentElement.scrollTop || document.body.scrollTop >= 50)
+      {
+        let cart_position = this.elem.getBoundingClientRect();
+        let cart_new_left = document.querySelector('.container').getBoundingClientRect().right + 20;
+        if (window_width - (cart_new_left + cart_position.width) < 10)
+          cart_new_left = window_width - cart_position.width - 10;
+        this.elem.style.position = 'fixed';
+        this.elem.style.zIndex = 1000;
+        this.elem.style.left = cart_new_left + 'px';
+        this.scroll_mode = true;
+        //console.log(`scroll mode applied`);
+      }
+      else if (this.elem.style.position === 'fixed' && this.scroll_mode == true)
+      {
+        this.elem.style.position = 'absolute';
+        this.elem.style.left = '';
+        this.elem.style.zIndex = '';
+        this.scroll_mode = false;
+        //console.log(`scroll mode disabled`);
+      }
+    }
   }
 }
