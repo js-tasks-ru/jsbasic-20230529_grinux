@@ -25,7 +25,7 @@ export default class StepSlider {
     for (let i = 0; i < steps; i++)
       slider_steps.appendChild(createElement(`<span></span>`));
     slider_steps.children[this._position].classList.add('slider__step-active');
-    slider.querySelector('.slider__value').innerText = this._position;  
+    slider_value.innerText = this._position;  
     let fill = 100 / (steps - 1) * this._position; 
     slider_progress.style.width = `${fill}%`;   
     slider_thumb.style.left = `${fill}%`;
@@ -45,27 +45,23 @@ export default class StepSlider {
         new_x = new_x >= this._right_limit ? this._right_limit : new_x;
         s_fill(new_x);      
         //вычисляем новую дискретную позицию
-        let position = this._position;
+        this._new_position = this._position;
+        //console.log(`current position: ${this._position}`);
         for(;;)
         {
-          if (position < steps - 1 && new_x > this._catch_x[position])
-            position++;
-          else if (position && new_x < this._catch_x[position - 1])
-            position--;
+          if (this._new_position < steps - 1 && new_x > this._catch_x[this._new_position])
+            this._new_position++;
+          else if (this._new_position && new_x < this._catch_x[this._new_position - 1])
+            this._new_position--;
           else
             break;
         }
-        if (position != this._position)
+        if (this._new_position != this._position)
         {
-          slider_value.innerText = position;
+          slider_value.innerText = this._new_position;
           slider_steps.children[this._position].classList.remove('slider__step-active');
-          slider_steps.children[position].classList.add('slider__step-active');
-          this._position = position;
-          slider.dispatchEvent(new CustomEvent('slider-change', {
-            detail: this._position,
-            bubbles: true
-          }));
-          //console.log(`move event generated. position: ${this._position}`);
+          slider_steps.children[this._new_position].classList.add('slider__step-active');
+          //console.log(`new position: ${this._new_position}`);
         }
       }
     }
@@ -99,28 +95,34 @@ export default class StepSlider {
     }
 
     const move_x_finalize = event => {
-      let final_x = this._catch_x[this._position] - this._delta_x / 2;
+      let final_x = this._catch_x[this._new_position] - this._delta_x / 2;
       s_fill(final_x);
       if (event.type == 'pointerup')
         slider.classList.remove('slider_dragging');
-      slider.dispatchEvent(new CustomEvent('slider-change', {
-        detail: this._position,
-        bubbles: true
-      }));
+      if (this._position != this._new_position) {
+        slider.dispatchEvent(new CustomEvent('slider-change', {
+          detail: this._new_position,
+          bubbles: true
+        }));
+        this._position = this._new_position;
+      }
     }
     
     slider_thumb.addEventListener('pointerdown', event => {
+      //console.log(`pointerdown, taget: ${event.target.className}`);
       event.preventDefault();
       slider.classList.add('slider_dragging');
       move_x_prepare(event);
       document.addEventListener('pointermove', move_x_event);
       document.addEventListener('pointerup', event => {
+        //console.log(`pointerup, taget: ${event.target.className}`);
         document.removeEventListener('pointermove', move_x_event);
         move_x_finalize(event);
     }, { once: true });
     });
 
     slider.addEventListener('click', event => {
+      //console.log(`click, taget: ${event.target.className}`);
       move_x_prepare(event);
       move_x(event.pageX);
       move_x_finalize(event);
