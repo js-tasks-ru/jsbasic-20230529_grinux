@@ -20,13 +20,13 @@ export default class StepSlider {
     let slider_thumb = slider.querySelector('.slider__thumb');
 
     this._elem = slider;
-    this._position = value;
+    this.position = value;
 
     for (let i = 0; i < steps; i++)
       slider_steps.appendChild(createElement(`<span></span>`));
-    slider_steps.children[this._position].classList.add('slider__step-active');
-    slider_value.innerText = this._position;  
-    let fill = 100 / (steps - 1) * this._position; 
+    slider_steps.children[this.position].classList.add('slider__step-active');
+    slider_value.innerText = this.position;  
+    let fill = 100 / (steps - 1) * this.position; 
     slider_progress.style.width = `${fill}%`;   
     slider_thumb.style.left = `${fill}%`;
  
@@ -45,8 +45,8 @@ export default class StepSlider {
         new_x = new_x >= this._right_limit ? this._right_limit : new_x;
         s_fill(new_x);      
         //вычисляем новую дискретную позицию
-        this._new_position = this._position;
-        //console.log(`current position: ${this._position}`);
+        this._new_position = this.position;
+        //console.log(`current position: ${this.position}`);
         for(;;)
         {
           if (this._new_position < steps - 1 && new_x > this._catch_x[this._new_position])
@@ -56,10 +56,10 @@ export default class StepSlider {
           else
             break;
         }
-        if (this._new_position != this._position)
+        if (this._new_position != this.position)
         {
           slider_value.innerText = this._new_position;
-          slider_steps.children[this._position].classList.remove('slider__step-active');
+          slider_steps.children[this.position].classList.remove('slider__step-active');
           slider_steps.children[this._new_position].classList.add('slider__step-active');
           //console.log(`new position: ${this._new_position}`);
         }
@@ -99,12 +99,12 @@ export default class StepSlider {
       s_fill(final_x);
       if (event.type == 'pointerup')
         slider.classList.remove('slider_dragging');
-      if (this._position != this._new_position) {
+      if (this.position != this._new_position) {
         slider.dispatchEvent(new CustomEvent('slider-change', {
           detail: this._new_position,
           bubbles: true
         }));
-        this._position = this._new_position;
+        this.position = this._new_position;
       }
     }
     

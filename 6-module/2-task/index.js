@@ -19,13 +19,13 @@ export default class ProductCard {
         </div>
     </div>  
     `);
-    this._elem = item;
-    this._id = product['id'];
+    this.elem = item;
+    this.id = product['id'];
     item.addEventListener('click', event => {
       if (event.target.closest('.card__button'))
       {
         item.dispatchEvent(new CustomEvent('product-add', {
-          detail: this._id,
+          detail: this.id,
           bubbles: true
         }));
       }
@@ -33,8 +33,5 @@ export default class ProductCard {
     item.querySelector('.card__image').src += product['image'];
     item.querySelector('.card__price').innerText = '€' + product['price'].toFixed(2);
     item.querySelector('.card__title').innerText = product['name'];
-  }
-  get elem() {
-    return this._elem;
   }
 }
