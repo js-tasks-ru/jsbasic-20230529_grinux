@@ -13,14 +13,14 @@ export default class StepSlider {
         <div class="slider__steps"></div>
       </div>
     `);
-    this._elem = slider;
-    this._position = value;
+    this.elem = slider;
+    this.position = value;
     let slider_steps = slider.querySelector('.slider__steps');
     for (let i = 0; i < steps; i++)
       slider_steps.appendChild(createElement(`<span></span>`));
-    slider_steps.children[this._position].classList.add('slider__step-active');
-    slider.querySelector('.slider__value').innerText = this._position;  
-    let s_fill = 100 / (steps - 1) * this._position;   
+    slider_steps.children[this.position].classList.add('slider__step-active');
+    slider.querySelector('.slider__value').innerText = this.position;  
+    let s_fill = 100 / (steps - 1) * this.position;   
     slider.querySelector('.slider__thumb').style.left = `${s_fill}%`;
     slider.querySelector('.slider__progress').style.width = `${s_fill}%`; 
 
@@ -42,7 +42,7 @@ export default class StepSlider {
       }
       slider.querySelector('.slider__value').innerText = new_position;
       slider.querySelector('.slider__steps')
-            .children[this._position]
+            .children[this.position]
             .classList.remove('slider__step-active');  
       slider.querySelector('.slider__steps')
             .children[new_position]
@@ -50,15 +50,12 @@ export default class StepSlider {
       s_fill = 100 / (steps - 1) * new_position;      
       slider.querySelector('.slider__thumb').style.left = `${s_fill}%`;
       slider.querySelector('.slider__progress').style.width = `${s_fill}%`;      
-      this._position = new_position;
+      this.position = new_position;
 
       slider.dispatchEvent(new CustomEvent('slider-change', {
-        detail: this._position,
+        detail: this.position,
         bubbles: true
       }));
     });
-  }
-  get elem(){
-    return this._elem;
   }
 }

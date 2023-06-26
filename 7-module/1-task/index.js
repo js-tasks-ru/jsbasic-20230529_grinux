@@ -17,7 +17,7 @@ export default class RibbonMenu {
   constructor(categories) {
     if (!categories.length)
       return;
-    this._categories = categories;
+    this.categories = categories;
     let ribbon = createElement(`
       <div class="ribbon">
         <button class="ribbon__arrow ribbon__arrow_left ribbon__arrow_visible">
@@ -31,9 +31,10 @@ export default class RibbonMenu {
 
     for(let category of categories)
       ribbon_inner.appendChild(new RibbonItem(category).elem);
-    this._active_item = ribbon_inner.querySelector('a[data-id=""]');
-    this._active_item.classList.add("ribbon__item_active");//All active by default
-                                    
+    this.active_item = ribbon_inner.querySelector('a[data-id=""]');
+    this.active_item.classList.add("ribbon__item_active");//All active by default
+    this.id = this.active_item.getAttribute('data-id');
+    
     ribbon.appendChild(createElement(`
       <button class="ribbon__arrow ribbon__arrow_right">
         <img src="/assets/images/icons/angle-icon.svg" alt="icon">
@@ -58,19 +59,16 @@ export default class RibbonMenu {
           click_src = event.target.closest('a');
           if (click_src) 
           {
-            let id = click_src.getAttribute('data-id');
-            if (id) 
-            { 
-              event.preventDefault();
-              //console.log('Click source: ', id); 
-              this._active_item.classList.remove('ribbon__item_active');
-              click_src.classList.add('ribbon__item_active');
-              this._active_item = click_src;
-              ribbon.dispatchEvent(new CustomEvent('ribbon-select', {
-                detail: id,
-                bubbles: true
-              }));
-            }
+            event.preventDefault();
+            this.active_item.classList.remove('ribbon__item_active');
+            click_src.classList.add('ribbon__item_active');
+            this.active_item = click_src;
+            this.id = click_src.getAttribute('data-id');
+            //console.log('Click source: ', this.id);
+            ribbon.dispatchEvent(new CustomEvent('ribbon-select', {
+              detail: this.id,
+              bubbles: true
+            }));
           }
         }
       });
